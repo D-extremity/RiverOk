@@ -1,16 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverok/usermodel.dart';
 
-final nameProvider = StateProvider<String>((ref) => 'Satyam Srivastav');
+//! Combination of StateNotifier and StateNotifierProvider is used for Complex data
+//! on production level StateNotifier and StateNotifierProvider is used as all the business logic lies in just one class
+//! here it is on line 63 usermodel.dart file
+//! it also helps in maintaining logic part and Ui of app seprately 
+//! helps in testing of app 
+//! because of other many reasons these both are preffered more than Providers
+
+//^ In user model we used StateNotifier to change the changes made by user
+//^  to call it and use it StateNotifierProvider is used
+final userProvider = StateNotifierProvider<UserNotifier2, User>(
+    (ref) => UserNotifier2(const User(name: "", age: 0)));
+
+
+//! always call function outside to change any parameter and also it is better way to keep logic and UI part separately 
+void setText(WidgetRef ref, String value) {
+  ref.read(userProvider.notifier).updateName(value);
+}
+
 void main() {
   runApp(const MyApp());
 }
 
 // TextEditingController getText = TextEditingController();
-
-void setText(WidgetRef ref, String value) {
-  ref.read(nameProvider.notifier).update((state) => value);
-}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -40,15 +54,18 @@ class _Screen1State extends State<Screen1> {
       child: Scaffold(
         body: Consumer(
           builder: (context, ref, child) {
-            final String name = ref.watch(nameProvider);
+            final user = ref.watch(userProvider);
 
             return Column(
               children: [
                 TextField(
                   // controller: getText,
-                onSubmitted:(value)=>setText(ref,value),
+                  onSubmitted: (value) => setText(ref, value),
                 ),
-                Text(name)
+                Text(
+                  "${user.name} ${user.age}",
+                  style: const TextStyle(color: Colors.black),
+                )
               ],
             );
           },
