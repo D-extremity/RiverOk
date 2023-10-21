@@ -9,13 +9,14 @@ import 'package:riverok/usermodel.dart';
 //! helps in testing of app 
 //! because of other many reasons these both are preffered more than Providers
 
-//^ In user model we used StateNotifier to change the changes made by user
+//^ In user model we used StateNotifier to update the changes made by user
 //^  to call it and use it StateNotifierProvider is used
 final userProvider = StateNotifierProvider<UserNotifier2, User>(
     (ref) => UserNotifier2(const User(name: "", age: 0)));
 
 
 //! always call function outside to change any parameter and also it is better way to keep logic and UI part separately 
+//! ref.read() is preferred to be called outside because it reads the value once (not continuous)
 void setText(WidgetRef ref, String value) {
   ref.read(userProvider.notifier).updateName(value);
 }

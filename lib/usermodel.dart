@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-//*  all fields of this class were already immutable because of final keyword , so we declared it immutable
+//*  all fields of this class were already immutable because of final keyword , so we declared it/Override with immutable
 @immutable
 class User {
   final String name;
@@ -14,7 +14,7 @@ class User {
     required this.age,
   });
 
-  //! installed data class generator for dart then click on class name then generate data class
+  //! installed data class generator for dart then click on class name(here User) then  click on generate data class to get these methods
 
   User copyWith({
     String? name,
@@ -61,8 +61,13 @@ class User {
 
 //!method 2 for understanding first swipe down to method 1 , method 2 is implementation with better advance way
 class UserNotifier2 extends StateNotifier<User> {
-  UserNotifier2(super._state);
+//& StateNotifier will give us state (a variable) which will be used to update data in User class (State class provided in StateNotifier<Generic>).
+//& whatever data we are going to pass state will be of that type in our case it will be of User type.
+
+  UserNotifier2(
+      super._state); //& it will require User variable in its constructor whenever object of this class is called
   //& now by this method we just need to provide String for name as we only want to change that
+
   void updateName(String s) {
     state = state.copyWith(
         name:
@@ -74,12 +79,12 @@ class UserNotifier2 extends StateNotifier<User> {
   }
 }
 
-//! Method 1 (other) for understanding (for this we didn't need data class it was normal simple function)
+//! Method 1 (other) for understanding (for this we don't need data class it was normal simple function)
 
 //^ Creating class to Keep all methods to update name and age of User
 
 class UserNotifier extends StateNotifier<User> {
-//& StateNotifier will give us state (a variable) which will be used to update data in User class.
+//& StateNotifier will give us state (a variable) which will be used to update data in User class (State class provided in StateNotifier<Generic>).
 //& whatever data we are going to pass state will be of that type in our case it will be of User type.
 
   UserNotifier(
