@@ -65,7 +65,7 @@ class UserNotifier2 extends StateNotifier<User> {
 //& whatever data we are going to pass state will be of that type in our case it will be of User type.
 
   UserNotifier2(
-      super._state); //& it will require User variable in its constructor whenever object of this class is called
+      super._state); //& it will require User type object in its constructor whenever object of this class is called
   //& now by this method we just need to provide String for name as we only want to change that
 
   void updateName(String s) {

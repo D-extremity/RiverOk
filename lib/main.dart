@@ -5,8 +5,8 @@ import 'package:riverok/usermodel.dart';
 //! Combination of StateNotifier and StateNotifierProvider is used for Complex data
 //! on production level StateNotifier and StateNotifierProvider is used as all the business logic lies in just one class
 //! here it is on line 63 usermodel.dart file
-//! it also helps in maintaining logic part and Ui of app seprately 
-//! helps in testing of app 
+//! it also helps in maintaining logic part and Ui of app seprately
+//! helps in testing of app
 //! because of other many reasons these both are preffered more than Providers
 
 //^ In user model we used StateNotifier to update the changes made by user
@@ -14,11 +14,12 @@ import 'package:riverok/usermodel.dart';
 final userProvider = StateNotifierProvider<UserNotifier2, User>(
     (ref) => UserNotifier2(const User(name: "", age: 0)));
 
-
-//! always call function outside to change any parameter and also it is better way to keep logic and UI part separately 
+//! always call function outside to change any parameter and also it is better way to keep logic and UI part separately
 //! ref.read() is preferred to be called outside because it reads the value once (not continuous)
 void setText(WidgetRef ref, String value) {
-  ref.read(userProvider.notifier).updateName(value);//!if .notifier would not be there , it would have been impossible to call .update method
+  //& ref.read(userProvider) is of type "StateController" , whereas ref.read(userProvider.notifier) is of type "NotifierController" which allowed us access the function y converting to to object of that class
+  ref.read(userProvider.notifier).updateName(
+      value); //!if .notifier would not be there , it would have been impossible to call .update method
 }
 //^.notifier is used to access the notifier object associated with a state provider, and it allows you to call methods and modify the state using the provided notifier.
 //^-->The state object: This represents the current value of the state.
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //!dont forget to wrap the widget around ProviderScope to user riverpod
     return const ProviderScope(
       child: MaterialApp(
         home: Screen1(),
@@ -70,9 +72,12 @@ class _Screen1State extends State<Screen1> {
     // final String name = ref.read(nameProvider);
     return SafeArea(
       child: Scaffold(
+        //^ dont forget to use consumer widget otherwise extend ConsumerWidget (refer to handwritten notes )
         body: Consumer(
           builder: (context, ref, child) {
             final user = ref.watch(userProvider);
+            //& final user = ref.watch(userProvider.select((value) => value.name));
+            //& above syntax will give us feature --> widget will rebuilt only when "name" will change 
 
             return Column(
               children: [
